@@ -39,11 +39,21 @@ export const SignupPage = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarError, setAvatarError] = useState("");
 
+  // Retrieve pending registration inputs from localStorage if any
+  const getPendingReg = () => {
+    try {
+      return JSON.parse(localStorage.getItem("pending_registration") || "{}");
+    } catch {
+      return {};
+    }
+  };
+  const pendingReg = getPendingReg();
+
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
+      fullName: pendingReg.fullName || "",
+      email: pendingReg.email || "",
       password: "",
       confirmPassword: "",
     },
@@ -74,6 +84,12 @@ export const SignupPage = () => {
 
   const onSubmit = async (data: SignupSchemaType) => {
     try {
+      // Cache details locally to restore if user exits
+      localStorage.setItem(
+        "pending_registration",
+        JSON.stringify({ fullName: data.fullName, email: data.email })
+      );
+
       const formData = new FormData();
       formData.append("fullName", data.fullName);
       formData.append("email", data.email);
@@ -83,10 +99,24 @@ export const SignupPage = () => {
       }
 
       await dispatch(registerUser(formData)).unwrap();
-      toast.success("Account created successfully!");
-      navigate("/");
+      toast.success("Verification OTP sent to your email!");
+      navigate("/verify-email", { state: { email: data.email } });
     } catch (err: any) {
-      toast.error(err || "Registration failed. Please try again.");
+      const errStr = typeof err === "string" ? err : err?.message || "";
+      if (
+        errStr.includes("Email already registered but not verified") ||
+        errStr.includes("verify your email")
+      ) {
+        toast.info("Email registered but not verified. Redirecting to verification...");
+        // Ensure email is cached
+        localStorage.setItem(
+          "pending_registration",
+          JSON.stringify({ fullName: data.fullName, email: data.email })
+        );
+        navigate("/verify-email", { state: { email: data.email } });
+      } else {
+        toast.error(err || "Registration failed. Please try again.");
+      }
     }
   };
 

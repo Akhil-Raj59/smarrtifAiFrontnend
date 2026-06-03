@@ -12,7 +12,7 @@ import {
   Course,
   Lecture,
 } from "@/store/slices/courseSlice";
-import { getMockThumbnailUrl, getMockVideoUrl } from "@/services/api-client";
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -378,9 +378,9 @@ export const AdminDashboard = () => {
                   className="bg-white border border-gray-150 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
                 >
                   <div className="h-40 w-full bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden flex items-center justify-center">
-                    {course.thumbnail?.secure_url || getMockThumbnailUrl(course._id, "") ? (
+                    {course.thumbnail?.secure_url ? (
                       <img
-                        src={getMockThumbnailUrl(course._id, course.thumbnail?.secure_url || "")}
+                        src={course.thumbnail.secure_url}
                         alt={course.title}
                         className="w-full h-full object-cover"
                       />
@@ -644,9 +644,9 @@ export const AdminDashboard = () => {
                               </span>
                               <h4 className="font-extrabold text-gray-900 text-base mt-0.5">{lecture.title}</h4>
                               <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{lecture.description}</p>
-                              {lecture.lecture?.secure_url || getMockVideoUrl(lecture._id, "") ? (
+                              {lecture.lecture?.secure_url ? (
                                 <a
-                                  href={getMockVideoUrl(lecture._id, lecture.lecture?.secure_url || "")}
+                                  href={lecture.lecture.secure_url}
                                   target="_blank"
                                   rel="noreferrer"
                                   className="inline-flex items-center gap-1 text-[11px] text-[var(--brand-red)] font-bold hover:underline mt-2"

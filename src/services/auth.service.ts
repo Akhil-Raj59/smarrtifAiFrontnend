@@ -42,6 +42,14 @@ export const authService = {
   async resetPassword(resetToken: string, password: string): Promise<any> {
     return apiClient.post(`/reset-password/${resetToken}`, { password });
   },
+
+  async verifyEmail(email: string, otp: string): Promise<any> {
+    return apiClient.post("/verify-email", { email, otp });
+  },
+
+  async resendVerificationOTP(email: string): Promise<any> {
+    return apiClient.post("/resend-verification-otp", { email });
+  },
 };
 
 export default authService;

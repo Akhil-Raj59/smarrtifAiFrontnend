@@ -10,7 +10,7 @@ import { WebinarsPage } from "@/features/webinars";
 import { EventsPage } from "@/features/events";
 import { BlogPage } from "@/features/blog";
 import { CareersPage } from "@/features/careers";
-import { LoginPage, SignupPage, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage } from "@/features/auth";
+import { LoginPage, SignupPage, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage, EmailVerificationPage } from "@/features/auth";
 import { ContactPage } from "@/features/contact";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
       { path: "contact-us", element: <ContactPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
+      { path: "verify-email", element: <EmailVerificationPage /> },
       { path: "forgot-password", element: <ForgotPasswordPage /> },
       { path: "forget-password/:resetToken", element: <ResetPasswordPage /> },
       { path: "reset-password/:resetToken", element: <ResetPasswordPage /> },

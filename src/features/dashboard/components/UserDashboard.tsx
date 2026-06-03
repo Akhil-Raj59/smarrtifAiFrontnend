@@ -9,7 +9,6 @@ import { DashboardCertificates } from "./DashboardCertificates";
 import { CareerBoost } from "./CareerBoost";
 import { BookOpen, Clock, PlayCircle, Video, AlertCircle, X, ChevronRight, User } from "lucide-react";
 import { toast } from "sonner";
-import { getMockThumbnailUrl, getMockVideoUrl } from "@/services/api-client";
 
 export const UserDashboard = () => {
   const dispatch = useAppDispatch();
@@ -99,9 +98,9 @@ export const UserDashboard = () => {
                     >
                       {/* Image / Banner */}
                       <div className="h-44 w-full bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden flex items-center justify-center">
-                        {course.thumbnail?.secure_url || getMockThumbnailUrl(course._id, "") ? (
+                        {course.thumbnail?.secure_url ? (
                           <img
-                            src={getMockThumbnailUrl(course._id, course.thumbnail?.secure_url || "")}
+                            src={course.thumbnail.secure_url}
                             alt={course.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
@@ -213,7 +212,7 @@ export const UserDashboard = () => {
                   <div className="flex-grow flex items-center justify-center overflow-hidden">
                     <video
                       key={activeLecture._id}
-                      src={getMockVideoUrl(activeLecture._id, activeLecture.lecture?.secure_url || "")}
+                      src={activeLecture.lecture?.secure_url || ""}
                       controls
                       controlsList="nodownload"
                       className="max-h-[50vh] max-w-full rounded-xl shadow-lg"

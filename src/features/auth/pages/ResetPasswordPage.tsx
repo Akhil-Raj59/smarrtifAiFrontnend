@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight } from "lucide-react";
+import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/store";
+import { loginUser } from "@/store/slices/authSlice";
 import authService from "@/services/auth.service";
 import {
   Form,
@@ -18,6 +20,7 @@ import { Input } from "@/components/ui/input";
 
 const resetPasswordSchema = z
   .object({
+    email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters"),
   })
@@ -30,6 +33,7 @@ type ResetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
 
 export const ResetPasswordPage = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { resetToken } = useParams();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -40,6 +44,7 @@ export const ResetPasswordPage = () => {
   const form = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
+      email: "",
       password: "",
       confirmPassword: "",
     },
@@ -47,15 +52,29 @@ export const ResetPasswordPage = () => {
 
   const onSubmit = async (data: ResetPasswordSchemaType) => {
     setIsLoading(true);
+    const loadingToast = toast.loading("Resetting password...");
     try {
       const response = await authService.resetPassword(resetToken || "", data.password);
       if (response && response.success) {
+        toast.dismiss(loadingToast);
+        toast.success("Password reset successfully!");
+        
+        // Log in the user automatically
+        const autoLoginToast = toast.loading("Logging you in...");
+        await dispatch(loginUser({ email: data.email, password: data.password })).unwrap();
+        toast.dismiss(autoLoginToast);
+        
         setIsSuccess(true);
-        toast.success(response.message || "Password reset successfully!");
+        toast.success("Successfully logged in!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
       } else {
+        toast.dismiss(loadingToast);
         toast.error(response?.message || "Failed to reset password. Please try again.");
       }
     } catch (err: any) {
+      toast.dismiss();
       const errMsg = err.response?.data?.message || err.message || "Failed to reset password.";
       toast.error(errMsg);
     } finally {
@@ -101,6 +120,32 @@ export const ResetPasswordPage = () => {
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Email Address
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                                <Mail className="h-4.5 w-4.5" />
+                              </span>
+                              <Input
+                                type="email"
+                                placeholder="name@company.com"
+                                className="w-full pl-11 pr-4 py-2.5 border border-gray-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-orange)] focus:border-transparent text-sm text-gray-900 h-auto"
+                                {...field}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="password"

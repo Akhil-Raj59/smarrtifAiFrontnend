@@ -37,38 +37,4 @@ export const baseApiClient = axios.create({
   ...commonConfig,
 });
 
-// why yoiu are mocking these urls ? please do not mock any data remove this code below and use the actual urls from the backend
-
-export const getMockVideoUrl = (
-  lectureId: string,
-  defaultUrl: string
-) => {
-  return (window as any).__mockVideos?.[lectureId] || defaultUrl;
-};
-
-export const getMockThumbnailUrl = (
-  courseId: string,
-  defaultUrl: string
-) => {
-  return (window as any).__mockThumbnails?.[courseId] || defaultUrl;
-};
-
-// Dynamically initialize mock backend if present
-const mockModules = import.meta.glob("./mock-backend.ts", {
-  eager: true,
-});
-
-const mockKey = "./mock-backend.ts";
-
-if (mockModules && mockModules[mockKey]) {
-  const mockFile = mockModules[mockKey] as any;
-
-  if (
-    mockFile &&
-    typeof mockFile.setupMocks === "function"
-  ) {
-    mockFile.setupMocks();
-  }
-}
-
 export default apiClient;
