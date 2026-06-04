@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchEnrolledCourses, fetchCourseLectures, clearSelectedLectures, Course, Lecture } from "@/store/slices/courseSlice";
 import { DashboardHeader } from "./DashboardHeader";
@@ -12,6 +13,7 @@ import { toast } from "sonner";
 
 export const UserDashboard = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const { enrolledCourses, selectedCourseLectures, status } = useAppSelector((state) => state.courses);
 
@@ -30,7 +32,16 @@ export const UserDashboard = () => {
     try {
       await dispatch(fetchCourseLectures(course._id)).unwrap();
     } catch (err: any) {
-      toast.error(err || "Failed to load course lectures.");
+      const errMsg = String(err).toLowerCase();
+      const isForbidden = errMsg.includes("purchase") || errMsg.includes("permission") || errMsg.includes("unauthorized") || errMsg.includes("subscribe");
+      if (isForbidden) {
+        toast.error("Access Denied: Please purchase this course to view lectures.");
+        setIsLecturesModalOpen(false);
+        setSelectedCourse(null);
+        navigate(`/programs/${course._id}`);
+      } else {
+        toast.error(err || "Failed to load course lectures.");
+      }
     }
   };
 
@@ -44,7 +55,7 @@ export const UserDashboard = () => {
   // Safe wrapper for user details
   const headerData = {
     name: user?.fullName || "Student",
-    plan: user?.subscription?.status === "active" ? "Pro Learner" : "Learner",
+    plan: user?.role === "ADMIN" ? "Administrator" : (enrolledCourses.length > 0 ? "Premium Learner" : "Learner"),
     enrollment: user?.email || "Learning Journey",
     progress: enrolledCourses.length > 0 ? 65 : 0,
     avatarUrl: user?.avatar?.secure_url,

@@ -32,6 +32,8 @@ export interface Course {
   category: string;
   createdBy: string;
   numberOfLectures: number;
+  price: number;
+  isPurchased?: boolean;
   thumbnail?: {
     public_id: string;
     secure_url: string;

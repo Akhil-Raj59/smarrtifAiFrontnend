@@ -1,5 +1,5 @@
 
-import apiClient, { coursesApiClient } from "./interceptors";
+import apiClient, { coursesApiClient, paymentsApiClient } from "./interceptors";
 import type { Course, Lecture } from "@/types/api";
 
 export const courseService = {
@@ -12,7 +12,7 @@ export const courseService = {
   },
 
   async fetchEnrolledCourses(): Promise<any> {
-    return apiClient.get("/enrolled-courses");
+    return paymentsApiClient.get("/purchased");
   },
 
   async createCourse(formData: FormData): Promise<any> {

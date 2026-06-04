@@ -6,6 +6,28 @@ export const paymentService = {
     return paymentsApiClient.get("/razorpay-key");
   },
 
+  async createOrder(courseId: string): Promise<any> {
+    return paymentsApiClient.post("/create-order", { courseId });
+  },
+
+  async verifyPayment(payload: {
+    razorpay_payment_id: string;
+    razorpay_order_id: string;
+    razorpay_signature: string;
+    courseId: string;
+  }): Promise<any> {
+    return paymentsApiClient.post("/verify", payload);
+  },
+
+  async checkCoursePurchaseStatus(courseId: string): Promise<any> {
+    return paymentsApiClient.get(`/status/${courseId}`);
+  },
+
+  async fetchPurchasedCourses(): Promise<any> {
+    return paymentsApiClient.get("/purchased");
+  },
+
+  // Legacy Subscription APIs (Deprecated)
   async subscribe(): Promise<any> {
     return paymentsApiClient.post("/subscribe");
   },

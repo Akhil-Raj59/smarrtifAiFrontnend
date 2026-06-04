@@ -50,6 +50,21 @@ export const subscribeToCourse = createAsyncThunk(
   }
 );
 
+export const createCourseOrder = createAsyncThunk(
+  "payment/createCourseOrder",
+  async (courseId: string, { rejectWithValue }) => {
+    try {
+      const response = await paymentService.createOrder(courseId);
+      if (response && response.success) {
+        return response;
+      }
+      return rejectWithValue(response?.message || "Order creation failed.");
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Order creation failed.");
+    }
+  }
+);
+
 export const verifyPayment = createAsyncThunk(
   "payment/verifyPayment",
   async (
@@ -62,6 +77,29 @@ export const verifyPayment = createAsyncThunk(
   ) => {
     try {
       const response = await paymentService.verifySubscription(payload);
+      if (response && response.success) {
+        return response.message || "Payment verified successfully";
+      }
+      return rejectWithValue(response?.message || "Payment verification failed.");
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Payment verification failed.");
+    }
+  }
+);
+
+export const verifyCoursePayment = createAsyncThunk(
+  "payment/verifyCoursePayment",
+  async (
+    payload: {
+      razorpay_payment_id: string;
+      razorpay_order_id: string;
+      razorpay_signature: string;
+      courseId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await paymentService.verifyPayment(payload);
       if (response && response.success) {
         return response.message || "Payment verified successfully";
       }
@@ -115,11 +153,11 @@ const paymentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get Razorpay Key
+      
       .addCase(getRazorpayKey.fulfilled, (state, action: PayloadAction<string>) => {
         state.razorpayKey = action.payload;
       })
-      // Subscribe
+      
       .addCase(subscribeToCourse.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -132,7 +170,7 @@ const paymentSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
-      // Verify
+      
       .addCase(verifyPayment.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -144,7 +182,7 @@ const paymentSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
-      // Unsubscribe
+      
       .addCase(cancelSubscription.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -157,7 +195,7 @@ const paymentSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
-      // Fetch Payments
+      
       .addCase(fetchAllPayments.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -168,6 +206,30 @@ const paymentSlice = createSlice({
         state.paymentsCount = action.payload.count;
       })
       .addCase(fetchAllPayments.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      
+      .addCase(createCourseOrder.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(createCourseOrder.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(createCourseOrder.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      
+      .addCase(verifyCoursePayment.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(verifyCoursePayment.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(verifyCoursePayment.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

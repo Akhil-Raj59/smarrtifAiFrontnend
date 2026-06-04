@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "./layouts/root-layout";
 import { HomePage } from "@/features/home";
-import { ProgramsPage } from "@/features/programs";
+import { ProgramsPage, CourseDetailPage } from "@/features/programs";
 import { AssessmentPage } from "@/features/assessment";
 import { CorporateTrainingPage } from "@/features/corporate";
 import { DashboardPage } from "@/features/dashboard";
@@ -21,6 +21,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "programs", element: <ProgramsPage /> },
+      { path: "programs/:courseId", element: <CourseDetailPage /> },
       { path: "assessment", element: <AssessmentPage /> },
       { path: "corporate-training", element: <CorporateTrainingPage /> },
       { path: "dashboard", element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },

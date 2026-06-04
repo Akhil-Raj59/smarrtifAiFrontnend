@@ -1,8 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { fetchCourses, enrollInCourse, fetchEnrolledCourses } from "@/store/slices/courseSlice";
-import { checkAuthUser } from "@/store/slices/authSlice";
+import { fetchCourses, fetchEnrolledCourses } from "@/store/slices/courseSlice";
 import {
   Brain,
   Sparkles,
@@ -17,7 +16,6 @@ import {
   Shield,
   Loader2
 } from "lucide-react";
-import { toast } from "sonner";
 
 const getCategoryStyles = (category: string) => {
   const normalized = category.toLowerCase().trim();
@@ -69,10 +67,8 @@ const getCategoryStyles = (category: string) => {
 
 export const AvailablePrograms = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const { courses, enrolledCourses, status } = useAppSelector((state) => state.courses);
-  const [enrollingCourseId, setEnrollingCourseId] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -81,29 +77,10 @@ export const AvailablePrograms = () => {
     }
   }, [dispatch, user]);
 
-  const hasEnrolled = (courseId: string) => {
+  const hasEnrolled = (course: any) => {
     if (user?.role === "ADMIN") return true;
-    return enrolledCourses?.some((c: any) => c._id === courseId || c === courseId) || false;
-  };
-
-  const handleEnroll = async (courseId: string) => {
-    if (!user) {
-      toast.error("Please login to enroll in courses.");
-      navigate("/login");
-      return;
-    }
-
-    setEnrollingCourseId(courseId);
-    try {
-      await dispatch(enrollInCourse(courseId)).unwrap();
-      toast.success("You have successfully enrolled in this program!");
-      await dispatch(checkAuthUser()).unwrap();
-      navigate("/dashboard");
-    } catch (err: any) {
-      toast.error(err || "Failed to initiate enrollment.");
-    } finally {
-      setEnrollingCourseId(null);
-    }
+    if (course.isPurchased) return true;
+    return enrolledCourses?.some((c: any) => c._id === course._id || c === course._id) || false;
   };
 
   return (
@@ -143,11 +120,10 @@ export const AvailablePrograms = () => {
             {courses.map((course) => {
               const styles = getCategoryStyles(course.category);
               const CategoryIcon = styles.icon;
-              const isProcessing = enrollingCourseId === course._id;
-              const userEnrolled = hasEnrolled(course._id);
+              const userEnrolled = hasEnrolled(course);
 
               return (
-                <div key={course._id} className="scroll-mt-24 flex flex-col">
+                <div key={course._id} className="scroll-mt-24 flex flex-col animate-fade-in">
                   <div
                     className={`relative p-6 bg-gradient-to-br ${styles.gradient} shadow-md overflow-hidden rounded-3xl h-full flex flex-col justify-between border border-white/50`}
                   >
@@ -166,10 +142,14 @@ export const AvailablePrograms = () => {
                             {course.category}
                           </span>
                         </div>
-                        {userEnrolled && (
-                          <span className="text-[10px] font-extrabold tracking-wider uppercase bg-emerald-500 px-2.5 py-1 rounded-full text-white border border-emerald-600 shadow-sm flex items-center gap-1.5 animate-pulse">
+                        {userEnrolled ? (
+                          <span className="text-[10px] font-extrabold tracking-wider uppercase bg-emerald-500 px-2.5 py-1 rounded-full text-white border border-emerald-600 shadow-sm flex items-center gap-1.5">
                             <Shield className="h-3.5 w-3.5" />
                             Enrolled
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-extrabold tracking-wider uppercase bg-[var(--brand-orange)]/10 border border-[var(--brand-orange)]/20 px-2.5 py-1 rounded-full text-[var(--brand-orange)]">
+                            ₹{course.price || 0}
                           </span>
                         )}
                       </div>
@@ -219,26 +199,16 @@ export const AvailablePrograms = () => {
                           className="w-full py-3 px-4 rounded-xl text-white font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:shadow-md hover:scale-[1.01] transition-all text-xs flex items-center justify-center gap-1.5 shadow-sm"
                         >
                           <Shield className="h-4 w-4" />
-                          Enrolled - Go to Dashboard
+                          Continue Learning - Dashboard
                         </Link>
                       ) : (
-                        <button
-                          onClick={() => handleEnroll(course._id)}
-                          disabled={isProcessing}
-                          className="w-full py-3 px-4 rounded-xl text-white font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-95 hover:shadow-md hover:scale-[1.01] transition-all text-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-55 shadow-sm font-sans"
+                        <Link
+                          to={`/programs/${course._id}`}
+                          className="w-full py-3 px-4 rounded-xl text-white font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-95 hover:shadow-md hover:scale-[1.01] transition-all text-xs flex items-center justify-center gap-1.5 shadow-sm"
                         >
-                          {isProcessing ? (
-                            <>
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                              Processing Enrollment...
-                            </>
-                          ) : (
-                            <>
-                              Enrol in Program
-                              <ArrowRight className="h-4 w-4" />
-                            </>
-                          )}
-                        </button>
+                          View Details
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
                       )}
                     </div>
                   </div>
