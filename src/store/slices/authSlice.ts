@@ -23,6 +23,9 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authService.login(credentials);
       if (response && response.success && response.user) {
+        if ((response as any).token) {
+          localStorage.setItem("token", (response as any).token);
+        }
         return response.user;
       }
       return rejectWithValue(response?.message || "Login failed.");
@@ -54,8 +57,10 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
+      localStorage.removeItem("token");
       return null;
     } catch (error: any) {
+      localStorage.removeItem("token");
       return null;
     }
   }

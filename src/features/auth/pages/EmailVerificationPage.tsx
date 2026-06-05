@@ -79,6 +79,11 @@ export const EmailVerificationPage = () => {
           dispatch(setUser(response.user));
         }
 
+        // Save Bearer Token if present in response
+        if (response.token) {
+          localStorage.setItem("token", response.token);
+        }
+
         // Clean up pending registration from localStorage
         localStorage.removeItem("pending_registration");
 

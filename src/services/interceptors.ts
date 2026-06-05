@@ -4,6 +4,10 @@ import type { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from "axio
 
 const handleRequestConfig = (config: InternalAxiosRequestConfig) => {
   config.withCredentials = true; 
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 };
 
