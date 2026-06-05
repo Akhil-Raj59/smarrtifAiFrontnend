@@ -1,6 +1,19 @@
-
 import apiClient, { coursesApiClient, paymentsApiClient, adminApiClient, baseApiClient } from "./api-client";
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from "axios";
+
+
+const handleRequestConfig = (config: InternalAxiosRequestConfig) => {
+  config.withCredentials = true; 
+  return config;
+};
+
+
+apiClient.interceptors.request.use(handleRequestConfig);
+coursesApiClient.interceptors.request.use(handleRequestConfig);
+paymentsApiClient.interceptors.request.use(handleRequestConfig);
+adminApiClient.interceptors.request.use(handleRequestConfig);
+baseApiClient.interceptors.request.use(handleRequestConfig);
+
 
 const handleResponseSuccess = (response: AxiosResponse) => {
   return response.data;
@@ -31,6 +44,7 @@ const handleResponseError = (error: AxiosError) => {
 
   return Promise.reject(error);
 };
+
 
 apiClient.interceptors.response.use(handleResponseSuccess, handleResponseError);
 coursesApiClient.interceptors.response.use(handleResponseSuccess, handleResponseError);

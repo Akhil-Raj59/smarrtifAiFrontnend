@@ -1,4 +1,3 @@
-
 import apiClient from "./interceptors";
 import type { User, AuthResponse } from "@/types/api";
 
@@ -12,6 +11,7 @@ export const authService = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      withCredentials: true, 
     });
   },
 
@@ -32,6 +32,7 @@ export const authService = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      withCredentials: true, 
     });
   },
 

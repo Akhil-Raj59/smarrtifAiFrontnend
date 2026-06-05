@@ -143,7 +143,7 @@ export function Header() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex lg:items-center lg:gap-4">
-            <button
+            {/* <button
               onClick={() => dispatch(openComingSoonModal("Take Assessment"))}
               className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-lg overflow-hidden text-white hover:shadow-xl font-semibold transition-all cursor-pointer"
               style={{
@@ -157,14 +157,14 @@ export function Header() {
             >
               <Target className="h-4 w-4" />
               <span className="text-sm">Take Assessment</span>
-            </button>
-            <button
+            </button> */}
+            {/* <button
               onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
               className="hidden xl:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-[var(--brand-red)] text-[var(--brand-red)] hover:bg-[var(--brand-red)] hover:text-white transition-all duration-300 font-semibold cursor-pointer"
             >
               <Phone className="h-4 w-4" />
               <span className="text-sm">Book Consultation</span>
-            </button>
+            </button> */}
             
             {!user ? (
               <>
