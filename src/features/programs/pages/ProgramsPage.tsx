@@ -8,7 +8,7 @@ export const ProgramsPage = () => {
     <div className="bg-white">
       <ProgramsHero />
       <AvailablePrograms />
-      <LearningDuration />
+      {/* <LearningDuration /> */}
       <ProgramsCTA />
     </div>
   );
