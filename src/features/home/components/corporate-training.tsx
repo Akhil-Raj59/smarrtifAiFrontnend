@@ -1,6 +1,7 @@
 import { Building2, CheckCircle2, ArrowRight } from "lucide-react";
 import { useAppDispatch } from "@/store";
 import { openComingSoonModal } from "@/store/slices/uiSlice";
+import { Link } from "react-router-dom";
 
 export const CorporateTraining = () => {
   const dispatch = useAppDispatch();
@@ -40,9 +41,9 @@ export const CorporateTraining = () => {
                 ))}
               </ul>
             </div>
-            <button
-              onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-lg overflow-hidden text-white hover:shadow-xl transition-all mt-6 cursor-pointer"
+            <Link
+              to="/book-consultation"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-lg overflow-hidden text-white hover:shadow-xl transition-all mt-6 cursor-pointer font-semibold"
               style={{
                 backgroundImage: 'linear-gradient(to right, var(--brand-red) 0%, var(--brand-orange) 30%, var(--brand-orange) 70%, var(--brand-red) 100%)',
                 backgroundSize: '300% 100%',
@@ -58,7 +59,7 @@ export const CorporateTraining = () => {
             >
               Book Corporate Consultation
               <ArrowRight className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
           <div className="bg-gradient-to-br from-[var(--brand-red-light)] to-[var(--brand-orange-light)] rounded-2xl p-8 lg:p-10 flex items-center">
             <div className="bg-white rounded-xl shadow-xl p-6 lg:p-8 space-y-6 w-full">

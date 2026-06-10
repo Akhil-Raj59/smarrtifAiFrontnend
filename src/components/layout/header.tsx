@@ -158,13 +158,13 @@ export function Header() {
               <Target className="h-4 w-4" />
               <span className="text-sm">Take Assessment</span>
             </button> */}
-            {/* <button
-              onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
+            <Link
+              to="/book-consultation"
               className="hidden xl:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-[var(--brand-red)] text-[var(--brand-red)] hover:bg-[var(--brand-red)] hover:text-white transition-all duration-300 font-semibold cursor-pointer"
             >
               <Phone className="h-4 w-4" />
               <span className="text-sm">Book Consultation</span>
-            </button> */}
+            </Link>
             
             {!user ? (
               <>
@@ -342,15 +342,13 @@ export function Header() {
               >
                 Take Assessment
               </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  dispatch(openComingSoonModal("Book Consultation"));
-                }}
-                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[var(--brand-red)] to-[var(--brand-orange)] text-white text-center cursor-pointer"
+              <Link
+                to="/book-consultation"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[var(--brand-red)] to-[var(--brand-orange)] text-white text-center cursor-pointer text-sm font-semibold"
               >
                 Book Consultation
-              </button>
+              </Link>
 
               {/* Mobile Account Options */}
               <div className="border-t border-gray-100 pt-4 mt-2 flex flex-col gap-3">

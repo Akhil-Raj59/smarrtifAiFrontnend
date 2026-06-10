@@ -175,13 +175,13 @@ export const AssessmentResults = ({ formData }: AssessmentResultsProps) => {
         </div>
 
         <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-[var(--brand-red)] to-[var(--brand-orange)] text-white hover:shadow-xl transition-all cursor-pointer"
+          <Link
+            to="/book-consultation"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-[var(--brand-red)] to-[var(--brand-orange)] text-white hover:shadow-xl transition-all cursor-pointer font-semibold"
           >
             Book Free Consultation
             <ArrowRight className="h-5 w-5" />
-          </button>
+          </Link>
           <Link
             to="/training-plans"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg border-2 border-gray-300 text-gray-900 hover:border-[var(--brand-red)] hover:text-[var(--brand-red)] transition-all"

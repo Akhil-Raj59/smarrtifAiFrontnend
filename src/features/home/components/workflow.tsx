@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Users, Target, TrendingUp, BookOpen, Rocket, Phone } from "lucide-react";
 import { useAppDispatch } from "@/store";
 import { openComingSoonModal } from "@/store/slices/uiSlice";
+import { Link } from "react-router-dom";
 
 export const Workflow = () => {
   const dispatch = useAppDispatch();
@@ -100,8 +101,8 @@ export const Workflow = () => {
               <Target className="h-4 w-4" />
               Take Assessment
             </button>
-            <button
-              onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
+            <Link
+              to="/book-consultation"
               className="relative inline-flex items-center gap-2 px-6 py-3 rounded-lg overflow-hidden text-white hover:shadow-xl font-semibold transition-all cursor-pointer"
               style={{
                 backgroundImage: 'linear-gradient(to right, var(--brand-red) 0%, var(--brand-orange) 30%, var(--brand-orange) 70%, var(--brand-red) 100%)',
@@ -114,7 +115,7 @@ export const Workflow = () => {
             >
               <Phone className="h-4 w-4" />
               Book Consultation
-            </button>
+            </Link>
           </div>
         </div>
       </div>

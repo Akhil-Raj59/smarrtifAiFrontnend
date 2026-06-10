@@ -1,6 +1,7 @@
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useAppDispatch } from "@/store";
 import { openComingSoonModal } from "@/store/slices/uiSlice";
+import { Link } from "react-router-dom";
 
 export const FinalCTA = () => {
   const dispatch = useAppDispatch();
@@ -31,12 +32,12 @@ export const FinalCTA = () => {
             <ArrowRight className="h-5 w-5" />
           </button>
           
-          <button
-            onClick={() => dispatch(openComingSoonModal("Book Consultation"))}
+          <Link
+            to="/book-consultation"
             className="inline-flex items-center justify-center px-8 py-4 rounded-xl border-2 border-white text-white hover:bg-white hover:text-[var(--brand-orange)] font-bold hover:scale-105 active:scale-95 transition-all duration-300 min-w-[200px] cursor-pointer"
           >
             Talk to an Expert
-          </button>
+          </Link>
         </div>
 
         {/* Bullet Points */}

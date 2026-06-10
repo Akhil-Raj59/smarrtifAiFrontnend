@@ -13,6 +13,8 @@ import { CareersPage } from "@/features/careers";
 import { LoginPage, SignupPage, ForgotPasswordPage, ResetPasswordPage, ChangePasswordPage, EmailVerificationPage } from "@/features/auth";
 import { ContactPage } from "@/features/contact";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { BookConsultationPage } from "@/features/consultation";
+
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,7 @@ export const router = createBrowserRouter([
       { path: "forget-password/:resetToken", element: <ResetPasswordPage /> },
       { path: "reset-password/:resetToken", element: <ResetPasswordPage /> },
       { path: "change-password", element: <ProtectedRoute><ChangePasswordPage /></ProtectedRoute> },
+      { path: "book-consultation", element: <BookConsultationPage /> },
     ],
   },
 ]);
