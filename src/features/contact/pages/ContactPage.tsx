@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Phone, MapPin, Send, HelpCircle, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, HelpCircle, ArrowRight, Loader2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import contactService from "@/services/contact.service";
 import {
@@ -113,6 +113,25 @@ export const ContactPage = () => {
                   +91 98765 43210
                 </a>
                 <p className="text-xs text-gray-500 mt-1 leading-normal">Mon - Sat: 9:00 AM - 6:00 PM IST</p>
+              </div>
+            </div>
+
+            {/* WhatsApp Support */}
+            <div className="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 hover:shadow-md transition-all duration-300 flex items-start gap-4">
+              <div className="p-3.5 bg-emerald-500 text-white rounded-2xl shadow-sm">
+                <MessageCircle className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-gray-900 text-sm mb-1 uppercase tracking-wider">WhatsApp Us</h3>
+                <a 
+                  href="https://wa.me/919821553489" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-650 text-sm hover:underline font-semibold"
+                >
+                  +91 98215 53489
+                </a>
+                <p className="text-xs text-gray-500 mt-1 leading-normal">Fast support. Mon - Sun: 9:00 AM - 9:00 PM IST</p>
               </div>
             </div>
 
